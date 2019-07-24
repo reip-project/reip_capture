@@ -44,18 +44,45 @@ fi
 echo
 echo "--- Capturing simulataneous test video from each camera ---"
 
+# Set video parameters
 width=2592
 height=1944
 framerate=15
 numbuffers=90
 bitrate=20000000
 
+# Set output paths
 port_0_out="$tmp_path/port_0.mp4"
 port_1_out="$tmp_path/port_1.mp4"
 
-gst-launch-1.0 v4l2src num-buffers="$numbuffers" device="$port_0" ! image/jpeg,width="$width",height="$height",framerate="$framerate"/1 ! jpegdec ! nvvidconv ! 'video/x-raw(memory:NVMM), format=(string)I420' ! omxh265enc bitrate="$bitrate" ! 'video/x-h265, stream-format=(string)byte-stream' ! h265parse ! qtmux ! filesink location="$port_0_out" > /dev/null 2>&1 &
-gst-launch-1.0 v4l2src num-buffers="$numbuffers" device="$port_1" ! image/jpeg,width="$width",height="$height",framerate="$framerate"/1 ! jpegdec ! nvvidconv ! 'video/x-raw(memory:NVMM), format=(string)I420' ! omxh265enc bitrate="$bitrate" ! 'video/x-h265, stream-format=(string)byte-stream' ! h265parse ! qtmux ! filesink location="$port_1_out" > /dev/null 2>&1
+# Launch test capture on camera 0 (non blocking)
+gst-launch-1.0 v4l2src num-buffers="$numbuffers" device="$port_0" \
+	! image/jpeg,width="$width",height="$height",framerate="$framerate"/1 \
+	! jpegdec \
+	! nvvidconv \
+	! 'video/x-raw(memory:NVMM), format=(string)I420' \
+	! omxh265enc bitrate="$bitrate" \
+	! 'video/x-h265, stream-format=(string)byte-stream' \
+	! h265parse \
+	! qtmux \
+	! filesink location="$port_0_out" \
+	> /dev/null 2>&1 \
+	&
 
+# Launch test capture on camera 1 (blocking)
+gst-launch-1.0 v4l2src num-buffers="$numbuffers" device="$port_1" \
+	! image/jpeg,width="$width",height="$height",framerate="$framerate"/1 \
+	! jpegdec \
+	! nvvidconv \
+	! 'video/x-raw(memory:NVMM), format=(string)I420' \
+	! omxh265enc bitrate="$bitrate" \
+	! 'video/x-h265, stream-format=(string)byte-stream' \
+	! h265parse \
+	! qtmux \
+	! filesink location="$port_1_out" \
+	> /dev/null 2>&1
+
+# Check if camera 0 recorded video with reasonable size
 if [[ $(find "$port_0_out" -type f -size +1024000c 2>/dev/null) ]]; then
 	echo "$port_0_out written to RAM disk"
 	# gst-discoverer-1.0 $port_0_out
@@ -67,6 +94,7 @@ else
 	exit 1
 fi
 
+# Check if camera 0 recorded video with reasonable size
 if [[ $(find "$port_1_out" -type f -size +1024000c 2>/dev/null) ]]; then
 	echo "$port_1_out written to RAM disk"
 	# gst-discoverer-1.0 $port_0_out
@@ -78,7 +106,11 @@ else
 	exit 1
 fi
 
-# rm $port_0_out
-# rm $port_1_out
+# Remove test files
+rm $port_0_out
+rm $port_1_out
 
-# TODO: framerate coming out at 12.8903 then 12.8884 FPS - variable framerate
+echo
+echo "--- Camera setup and tests successful ---"
+
+exit 0
