@@ -6,6 +6,8 @@ tmp_path="$local_dir/tmp"
 # Create temp folder if it doesnt exist already
 if ! test -d "$tmp_path"; then
 	mkdir "$tmp_path"
+else
+	rm $tmp_path/*.mp4
 fi
 
 # Mount RAM disk partition at temp path local location

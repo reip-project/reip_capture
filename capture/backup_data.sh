@@ -2,15 +2,21 @@
 
 echo "	--- Copying files to backup location ---"
 
-local_dir=$1
+mac_address=$(cat /sys/class/net/eth0/address | sed s/://g | tr "[:upper:]" "[:lower:]")
+
+local_data_dir=$1
+local_dir=$2
 nfs_path="$local_dir/nfs"
 node_nfs_outpath=$nfs_path/$mac_address
 
 while true
 do
-	for f in $(find $local_dir -type f)
+	for f in $(find $local_data_dir -type f)
 	do
-		mv $f $node_nfs_outpath
+		if [ -z $(fuser $f) ]
+		then
+			mv $f $node_nfs_outpath
+		fi
 	done
 	sleep 1
 done

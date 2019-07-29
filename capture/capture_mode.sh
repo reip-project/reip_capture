@@ -19,7 +19,7 @@ port_1="/dev/v4l/by-path/platform-70090000.xusb-usb-0:2.1:1.0-video-index0"
 width=2592
 height=1944
 framerate=15
-numbuffers=90
+numbuffers=901
 bitrate=20000000
 
 echo "	$width x $height, $framerate fps, $numbuffers buffers, $bitrate bps"

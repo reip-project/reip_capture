@@ -1,0 +1,9 @@
+[Unit]
+Description=REIP capture functionality
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /home/reip/reip_capture/capture_run.sh
+
+[Install]
+WantedBy=multi-user.target
