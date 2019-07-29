@@ -17,7 +17,7 @@ fi
 nas_ip='192.168.0.108'
 nas_ext_path_root="/volume1/reip_data_nas" # Unsure about full path of remote location - TODO
 
-sudo mount -t nfs "$nas_ip:/$nas_ext_path_root $nfs_path"
+mount -t nfs $nas_ip:$nas_ext_path_root $nfs_path
 
 # echo "	--- Checking if NFS location is successfully mounted ---"
 

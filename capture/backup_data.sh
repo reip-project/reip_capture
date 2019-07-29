@@ -11,6 +11,12 @@ node_nfs_outpath=$nfs_path/$mac_address
 
 while true
 do
+	if ! [ "$(stat -f -L -c %T $nfs_path)" = "nfs" ]
+	then
+		sleep 5
+		continue
+	fi
+
 	for f in $(find $local_data_dir -type f)
 	do
 		if [ -z $(fuser $f) ]

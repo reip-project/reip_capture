@@ -30,7 +30,6 @@ port_0_out="$tmp_path/port_0_$mac_address_"
 port_1_out="$tmp_path/port_1_$mac_address_"
 extension=".mp4"
 
-
 while true
 do
 	utc_ts=$(date +%s)
