@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "--- Starting video capture ---"
+echo "	--- Starting video capture ---"
 
-local_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+local_dir=$1
 tmp_path="$local_dir/tmp"
 
 data_dir="/mnt/reip_data"
@@ -66,8 +66,8 @@ do
 		> /dev/null 2>&1
 
 	# Move files from RAM disk to data partition (non blocking)
-	mv "$port_0_outpath" "$data_dir$/port_0_$mac_address_$utc_ts$extension" &
-	mv "$port_1_outpath" "$data_dir$/port_1_$mac_address_$utc_ts$extension" &
+	sudo mv "$port_0_outpath" "$data_dir/port_0/port_0_$mac_address_$utc_ts$extension" &
+	sudo mv "$port_1_outpath" "$data_dir/port_1/port_1_$mac_address_$utc_ts$extension" &
 
 done
 

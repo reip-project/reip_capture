@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get current working directory
-local_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+local_dir=$1
 tmp_path="$local_dir/tmp"
 # Create temp folder if it doesnt exist already
 if ! test -d "$tmp_path"; then
@@ -13,7 +13,7 @@ sudo mount -t tmpfs -o size=2G,mode=0755 tmpfs "$tmp_path"
 sudo chown -R reip "$tmp_path"
 
 
-echo "--- Checking if both cameras are connected ---"
+echo "	--- Checking if both cameras are connected ---"
 
 # port_0 is bottom left USB port as you look at the mounted Jetson inside the housing
 # usually used for the right facing camera
@@ -24,25 +24,25 @@ port_0="/dev/v4l/by-path/platform-70090000.xusb-usb-0:2.3:1.0-video-index0"
 port_1="/dev/v4l/by-path/platform-70090000.xusb-usb-0:2.1:1.0-video-index0"
 
 if test -e "$port_0"; then
-    echo "Camera found at port_0"
+    echo "		Camera found at port_0"
 else
-	echo "ERROR: camera missing at port_0"
-	echo "    (plug USB camera into the bottom left USB port)"
-	echo "Exiting"
+	echo "		ERROR: camera missing at port_0"
+	echo "    		(plug USB camera into the bottom left USB port)"
+	echo "		Exiting"
 	exit 1
 fi
 
 if test -e "$port_1"; then
-    echo "Camera found at port_1"
+    echo "		Camera found at port_1"
 else
-	echo "ERROR: camera missing at port_1"
-	echo "    (plug USB camera into the bottom right USB port)"
+	echo "		ERROR: camera missing at port_1"
+	echo "    		(plug USB camera into the bottom right USB port)"
 	echo
-	echo "Exiting"
+	echo "		Exiting"
 	exit 1
 fi
 echo
-echo "--- Capturing simulataneous test video from each camera ---"
+echo "	--- Capturing simulataneous test video from each camera ---"
 
 # Set video parameters
 width=2592
@@ -87,10 +87,10 @@ if [[ $(find "$port_0_out" -type f -size +1024000c 2>/dev/null) ]]; then
 	echo "$port_0_out written to RAM disk"
 	# gst-discoverer-1.0 $port_0_out
 else
-    echo "ERROR: output file $port_0_out missing or too small in size"
-    echo "    (check gst-launch settings)"
+    echo "		ERROR: output file $port_0_out missing or too small in size"
+    echo "    		(check gst-launch settings)"
 	echo
-	echo "Exiting"
+	echo "		Exiting"
 	exit 1
 fi
 
@@ -99,10 +99,10 @@ if [[ $(find "$port_1_out" -type f -size +1024000c 2>/dev/null) ]]; then
 	echo "$port_1_out written to RAM disk"
 	# gst-discoverer-1.0 $port_0_out
 else
-    echo "ERROR: output file $port_1_out missing or too small in size"
-    echo "    (check gst-launch settings)"
+    echo "		ERROR: output file $port_1_out missing or too small in size"
+    echo "    		(check gst-launch settings)"
 	echo
-	echo "Exiting"
+	echo "		Exiting"
 	exit 1
 fi
 
@@ -111,6 +111,6 @@ rm $port_0_out
 rm $port_1_out
 
 echo
-echo "--- Camera setup and tests successful ---"
-
-exit 0
+echo "	--- Camera setup and tests successful ---"
+echo
+echo
