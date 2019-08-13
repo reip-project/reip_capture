@@ -30,9 +30,20 @@ port_0_out="$tmp_path/port_0_$mac_address_"
 port_1_out="$tmp_path/port_1_$mac_address_"
 extension=".mp4"
 
+# DEBUG SWITCH FOR GST OUT - REMOVE FOR LIVE
+export GST_DEBUG=3
+
 while true
 do
-	utc_ts=$(date +%s)
+	if [ -z "$(lsof -e /run/user/1000/gvfs -XnP $port_0)" ]
+        then
+            :
+        else
+            sleep 0.1
+            continue
+        fi
+        
+        utc_ts=$(date +%s)
 	port_0_outpath=$port_0_out$utc_ts$extension
 
   	# Launch test capture on camera 0 (non blocking)
@@ -46,7 +57,7 @@ do
 		! h265parse \
 		! qtmux \
 		! filesink location="$port_0_outpath" \
-		> /dev/null 2>&1 \
+		&> "$port_0_outpath.log"  \
 		&
 
 	port_1_outpath=$port_1_out$utc_ts$extension
@@ -62,11 +73,22 @@ do
 		! h265parse \
 		! qtmux \
 		! filesink location="$port_1_outpath" \
-		> /dev/null 2>&1
-
+		&> "$port_1_outpath.log"
+        while true
+        do
+            if [ -z "$(fuser $port_0_outpath)" ]
+            then
+                break
+            else
+                sleep 0.1
+            fi
+        done
 	# Move files from RAM disk to data partition (non blocking)
-	sudo mv "$port_0_outpath" "$data_dir/port_0/port_0_$mac_address_$utc_ts$extension" &
-	sudo mv "$port_1_outpath" "$data_dir/port_1/port_1_$mac_address_$utc_ts$extension" &
+	mv "$port_0_outpath" "$data_dir/port_0/port_0_$mac_address_$utc_ts$extension" &
+	mv "$port_1_outpath" "$data_dir/port_1/port_1_$mac_address_$utc_ts$extension" &
+        mv "$port_0_outpath.log" "$data_dir/port_0/port_0_$mac_address_$utc_ts$extension.log" &
+        mv "$port_1_outpath.log" "$data_dir/port_1/port_1_$mac_address_$utc_ts$extension.log" &
 
 done
 
+exit 1

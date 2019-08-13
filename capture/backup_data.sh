@@ -9,10 +9,15 @@ local_dir=$2
 nfs_path="$local_dir/nfs"
 node_nfs_outpath=$nfs_path/$mac_address
 
+# Create NFS mount
+nas_ip='192.168.0.108'
+nas_ext_path_root="/volume1/reip_data_nas" # Unsure about full path of remote location - TODO
+
 while true
 do
 	if ! [ "$(stat -f -L -c %T $nfs_path)" = "nfs" ]
 	then
+		mount -t nfs $nas_ip:$nas_ext_path_root $nfs_path
 		sleep 5
 		continue
 	fi

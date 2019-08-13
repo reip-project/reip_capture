@@ -1,7 +1,9 @@
 #!/bin/bash
 
-echo "	--- Creating Linux services ---"
+echo "	--- Creating Linux services and installing lsof using apt ---"
 
-sudo cp /home/reip/reip_capture/reip_capture.service /etc/systemd/system/reip_capture.service
+apt install lsof
 
-sudo systemctl enable reip_capture.service
+cp /home/reip/reip_capture/reip_capture.service /etc/systemd/system/reip_capture.service
+
+systemctl enable reip_capture.service

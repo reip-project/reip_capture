@@ -2,8 +2,9 @@
 Description=REIP capture functionality
 
 [Service]
-Type=oneshot
+Type=simple
 ExecStart=/bin/bash /home/reip/reip_capture/capture_run.sh
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
