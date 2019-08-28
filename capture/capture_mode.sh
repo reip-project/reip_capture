@@ -19,8 +19,8 @@ port_1="/dev/v4l/by-path/platform-70090000.xusb-usb-0:2.1:1.0-video-index0"
 width=2592
 height=1944
 framerate=15
-numbuffers=901
-bitrate=20000000
+numbuffers=4505
+bitrate=15000000
 
 echo "	$width x $height, $framerate fps, $numbuffers buffers, $bitrate bps"
 
@@ -52,9 +52,9 @@ do
 		! jpegdec \
 		! nvvidconv \
 		! 'video/x-raw(memory:NVMM), format=(string)I420' \
-		! omxh265enc bitrate="$bitrate" \
-		! 'video/x-h265, stream-format=(string)byte-stream' \
-		! h265parse \
+		! omxh264enc bitrate="$bitrate" \
+		! 'video/x-h264, stream-format=(string)byte-stream' \
+		! h264parse \
 		! qtmux \
 		! filesink location="$port_0_outpath" \
 		&> "$port_0_outpath.log"  \
@@ -68,9 +68,9 @@ do
 		! jpegdec \
 		! nvvidconv \
 		! 'video/x-raw(memory:NVMM), format=(string)I420' \
-		! omxh265enc bitrate="$bitrate" \
-		! 'video/x-h265, stream-format=(string)byte-stream' \
-		! h265parse \
+		! omxh264enc bitrate="$bitrate" \
+		! 'video/x-h264, stream-format=(string)byte-stream' \
+		! h264parse \
 		! qtmux \
 		! filesink location="$port_1_outpath" \
 		&> "$port_1_outpath.log"
