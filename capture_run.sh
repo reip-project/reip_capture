@@ -21,5 +21,8 @@ chown -R reip $local_dir
 pkill -f "backup_data.sh"
 /bin/bash $task_dir/backup_data.sh "$local_data_dir" "$local_dir" &
 
+pkill -f "file_check.sh"
+/bin/bash $task_dir/file_check.sh "$local_data_dir" 50 &
+
 /bin/bash $task_dir/capture_mode.sh "$local_dir"
 

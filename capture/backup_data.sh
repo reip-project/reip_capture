@@ -10,7 +10,8 @@ nfs_path="$local_dir/nfs"
 node_nfs_outpath=$nfs_path/$mac_address
 
 # Create NFS mount
-nas_ip='192.168.0.108'
+# nas_ip='192.168.0.108'
+nas_ip=$(arp -a | grep "reip_nas_B0D4" | awk -F ' ' '{print $2}' | tr -d '()')
 nas_ext_path_root="/volume1/reip_data_nas" # Unsure about full path of remote location - TODO
 
 while true
