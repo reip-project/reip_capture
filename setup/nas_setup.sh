@@ -1,9 +1,10 @@
-#!/bin/bash
+	#!/bin/bash
 
 echo "	--- Creating NFS mount location and mounting ---"
 
 local_dir=$1
 nfs_path="$local_dir/nfs"
+nas_ip=$2
 
 # Create NFS location if it doesnt exist
 if ! test -d "$nfs_path"; then
@@ -15,7 +16,7 @@ fi
 
 # Create NFS mount
 # nas_ip='192.168.0.108'
-nas_ip=$(arp -a | grep "reip_nas_B0D4" | awk -F ' ' '{print $2}' | tr -d '()')
+
 nas_ext_path_root="/volume1/reip_data_nas" # Unsure about full path of remote location - TODO
 
 mount -t nfs $nas_ip:$nas_ext_path_root $nfs_path

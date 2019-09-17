@@ -16,10 +16,10 @@ chown -R reip $local_dir
 /bin/bash $setup_dir/camera_setup.sh "$local_dir"
 
 /bin/bash $setup_dir/partition_setup.sh "$local_data_dir"
-/bin/bash $setup_dir/nas_setup.sh "$local_dir"
+/bin/bash $setup_dir/nas_setup.sh "$local_dir" "192.168.1.155"
 
 pkill -f "backup_data.sh"
-/bin/bash $task_dir/backup_data.sh "$local_data_dir" "$local_dir" &
+/bin/bash $task_dir/backup_data.sh "$local_data_dir" "$local_dir" "192.168.1.155" &
 
 pkill -f "file_check.sh"
 /bin/bash $task_dir/file_check.sh "$local_data_dir" 50 &
