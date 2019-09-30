@@ -8,6 +8,9 @@ setup_dir=$local_dir/setup
 task_dir=$local_dir/capture
 local_data_dir="/mnt/reip_data"
 
+# Add nightly shutdown cronjob
+crontab -l | grep -q 'nightly_reboot'  && echo 'entry exists' || cat <(crontab -l) <(echo '0 2 * * * $local_dir/setup/nightly_reboot.sh') | crontab -
+
 find $local_dir -name "*.sh" -exec chmod +x {} +
 chown -R reip $local_dir
 
@@ -25,4 +28,3 @@ pkill -f "file_check.sh"
 /bin/bash $task_dir/file_check.sh "$local_data_dir" 50 &
 
 /bin/bash $task_dir/capture_mode.sh "$local_dir"
-
