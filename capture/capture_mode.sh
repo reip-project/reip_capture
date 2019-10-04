@@ -35,6 +35,9 @@ export GST_DEBUG=3
 
 while true
 do
+        # Kill all existing gst jobs as it can cause hangs if they sit around
+        pkill -f gst-launch
+
 	if [ -z "$(lsof -e /run/user/1000/gvfs -XnP $port_0)" ]
         then
             :
