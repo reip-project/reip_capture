@@ -76,7 +76,7 @@ do
 		&> "$port_1_outpath.log"
         while true
         do
-            if [ -z "$(fuser $port_0_outpath)" ]
+            if [ -z "$(lsof -e /run/user/1000/gvfs -XnP $port_0_outpath)" ]
             then
                 break
             else
@@ -90,5 +90,8 @@ do
         mv "$port_1_outpath.log" "$data_dir/port_1/port_1_$mac_address_$utc_ts$extension.log" &
 
 done
+
+# Restart service if we have broken out of capture loop
+systemctl restart reip_capture.service
 
 exit 1
