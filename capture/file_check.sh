@@ -18,7 +18,7 @@ while true; do
 	cur_hd_util=$(df --output=pcent / | tr -dc '0-9')
 
 	if [ $cur_hd_util -lt $del_limit ]; then
-		echo "Disk usage: $cur_hd_util"
+		# echo "Disk usage: $cur_hd_util"
 		continue
 	else
 		file_list=(`find $local_data_dir -type f -name '*.mp4' -printf '%T@ %p\0' | sort -zk 1nr | sed -z 's/^[^ ]* //' | tr '\0' '\n'`)
