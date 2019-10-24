@@ -17,4 +17,4 @@ if ! test -d "$data_dir/port_1"; then
 	mkdir "$data_dir/port_1"
 fi
 
-chown -R reip "$data_dir"
+chown -R root "$data_dir"

@@ -9,7 +9,7 @@ nas_ip=$2
 # Create NFS location if it doesnt exist
 if ! test -d "$nfs_path"; then
 	mkdir "$nfs_path"
-	chown -R reip "$nfs_path"
+	chown -R root "$nfs_path"
 fi
 
 # https://www.seagate.com/support/kb/how-to-mount-nfs-and-cifs-file-systems-on-linux-with-the-seagate-blackarmor-nas-209791en/
@@ -45,5 +45,5 @@ node_nfs_outpath=$nfs_path/$mac_address
 
 if ! test -d "$node_nfs_outpath"; then
 	mkdir "$node_nfs_outpath"
-	chown -R reip "$node_nfs_outpath"
+	chown -R root "$node_nfs_outpath"
 fi

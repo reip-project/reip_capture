@@ -12,7 +12,7 @@ fi
 
 # Mount RAM disk partition at temp path local location
 mount -t tmpfs -o size=2G,mode=0755 tmpfs "$tmp_path"
-chown -R reip "$tmp_path"
+chown -R root "$tmp_path"
 
 
 echo "	--- Checking if both cameras are connected ---"
